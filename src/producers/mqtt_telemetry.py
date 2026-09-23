@@ -3,10 +3,15 @@
 import json
 import time
 import ssl
+import os
 import paho.mqtt.client as mqtt
+from dotenv import load_dotenv
 
 from src.utils import settings, log
 from src.producers.simulator import WorkforceSimulator
+
+# Load environment variables
+load_dotenv()
 
 
 class MQTTTelemetryProducer:
@@ -17,7 +22,6 @@ class MQTTTelemetryProducer:
         self.client = mqtt.Client(client_id="ergostream-mqtt-producer")
 
         # MQTT broker configuration from environment
-        import os
         self.broker = os.getenv("MQTT_BROKER_HOST", "localhost")
         self.port = int(os.getenv("MQTT_BROKER_PORT", "8883"))
         self.username = os.getenv("MQTT_USERNAME")

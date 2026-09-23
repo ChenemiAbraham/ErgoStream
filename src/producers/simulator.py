@@ -71,9 +71,9 @@ class WorkerSimulator:
             return RiskLevel.HIGH
         elif self.fatigue_factor > 0.5 and risk_roll < 0.25:
             return RiskLevel.MODERATE
-        elif risk_roll < 0.05:
+        elif risk_roll < 0.30:  # Increased from 0.05 to 0.30 for demo (30% HIGH risk)
             return RiskLevel.HIGH
-        elif risk_roll < 0.15:
+        elif risk_roll < 0.50:  # Increased from 0.15 to 0.50 for demo
             return RiskLevel.MODERATE
         else:
             return RiskLevel.LOW

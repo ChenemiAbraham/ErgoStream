@@ -46,7 +46,19 @@ class RiskEventConsumer:
 
                 try:
                     # Parse the risk event
-                    value = json.loads(msg.value().decode('utf-8'))
+                    # Find JSON start (look for '{' character)
+                    raw_value = msg.value()
+
+                    # Find the first '{' to locate JSON start
+                    json_start = raw_value.find(b'{')
+                    if json_start > 0:
+                        # Skip binary header before JSON
+                        json_str = raw_value[json_start:].decode('utf-8')
+                    else:
+                        # Plain JSON
+                        json_str = raw_value.decode('utf-8')
+
+                    value = json.loads(json_str)
                     risk_event = RiskDetectionEvent(**value)
 
                     self.events_processed += 1

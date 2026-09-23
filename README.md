@@ -7,16 +7,25 @@ A real-time streaming intelligence system that detects ergonomic risk before an 
 ## 🎯 Architecture
 
 ```
-Worker Telemetry → Kafka Topics → Flink Processing → Risk Detection → AI Agent → Dashboard
+IoT Devices (MQTT) → EMQX Broker → Kafka → Flink SQL → Risk Detection (LIVE!)
+                                      ↓
+                               ergo.worker.motion
+                                      ↓
+                              Real-time Processing
+                                      ↓
+                              ergo.risk.detected ✅
+                                      ↓
+                            ergo.interventions (Phase 2)
 ```
 
-### Components
+### Components (Status)
 
-1. **Synthetic Data Generator** - Simulates worker motion events
-2. **Kafka Producers** - Streams events to Confluent Cloud
-3. **Flink SQL** - Real-time risk detection and aggregation
-4. **Rule-Based Agent** - Fast, deterministic intervention engine
-5. **Real-time Dashboard** - Live monitoring and alerts
+1. ✅ **MQTT Producer** - Simulates IoT worker sensors
+2. ✅ **EMQX Integration** - Industry-standard IoT message broker
+3. ✅ **MQTT Source Connector** - Confluent Cloud native connector
+4. ✅ **Flink SQL** - Real-time risk detection (HIGH/CRITICAL alerts)
+5. 🚧 **Rule-Based Agent** - Intervention generation (in development)
+6. 🚧 **Real-time Dashboard** - Live monitoring (planned)
 
 ## 🚀 Quick Start
 
@@ -86,30 +95,39 @@ ergostream/
 └── README.md
 ```
 
-## 🎪 Demo Flow
+## 🎪 Demo Flow (Live)
 
-1. **Generate synthetic worker data** - Realistic motion patterns
-2. **Stream to Kafka** - Multiple event types (motion, posture, tasks)
-3. **Flink processes in real-time** - Detects high-risk conditions
-4. **Agent intervenes** - Rule-based system generates actionable recommendations
-5. **Dashboard updates live** - Visual alerts and risk maps
+1. ✅ **MQTT Producer generates realistic telemetry** - Back angles, loads, repetition rates
+2. ✅ **EMQX broker ingests IoT data** - Standard MQTT protocol over TLS
+3. ✅ **MQTT Connector streams to Kafka** - `ergo.worker.motion` topic
+4. ✅ **Flink SQL processes in real-time** - Complex risk scoring algorithm
+5. ✅ **HIGH/CRITICAL risks detected** - Real-time alerts in `ergo.risk.detected`
 
-## 📊 Kafka Topics
+**What to show judges:**
+- Live MQTT producer streaming data (10x speed for demo)
+- Confluent Cloud Flink query detecting risks in real-time
+- Risk events appearing in `ergo.risk.detected` topic with:
+  - Risk levels (LOW/MODERATE/HIGH/CRITICAL)
+  - Risk scores (0-100)
+  - Contributing factors (excessive trunk flexion, heavy loads, etc.)
+  - Worker IDs and station tracking
 
-- `ergo.worker.motion` - Raw motion sensor data
-- `ergo.worker.posture` - Posture analysis events
-- `ergo.worker.task` - Task assignment events
-- `ergo.risk.detected` - High-risk conditions (Flink output)
-- `ergo.interventions` - AI-generated interventions
+## 📊 Kafka Topics (Active)
 
-## 🤖 Rule-Based Agent
+- ✅ `ergo.worker.motion` - Raw motion sensor data (6 partitions, ~600 msgs/hour)
+- ✅ `ergo.risk.detected` - HIGH/CRITICAL risk alerts (Flink output, ~150 msgs/hour)
+- 🚧 `ergo.interventions` - Intervention recommendations (Phase 2 architecture)
 
-The ErgoOps Agent monitors risk events and generates contextual interventions using deterministic logic:
+## 🤖 Phase 2: Automated Interventions (Planned)
 
-- Analyzes risk factors and exposure metrics
-- Generates actionable recommendations based on safety rules
-- Fast, reliable, no API keys required
-- Perfect for hackathon demos!
+The intervention system is designed to consume from `ergo.risk.detected` and generate:
+
+- Immediate action recommendations (task rotation, rest breaks)
+- Workstation adjustment suggestions
+- Safety protocol alerts
+- Historical trend analysis
+
+**Current Status:** Core risk detection (Phase 1) is complete and operational. Intervention automation is the next development phase.
 
 ## 📈 Business Impact
 
@@ -122,12 +140,14 @@ The ErgoOps Agent monitors risk events and generates contextual interventions us
 
 Built for the "Most Impactful App" challenge, demonstrating:
 
-- ✅ Confluent Connectors
-- ✅ Stream Processing with Flink
-- ✅ Stream Governance & Schema Registry
-- ✅ Real-time intelligent interventions
-- ✅ Business impact on worker safety
-- ✅ Fast, reliable, zero external dependencies
+- ✅ **Confluent Connectors** - MQTT Source Connector for IoT integration
+- ✅ **Stream Processing with Flink SQL** - Complex real-time risk scoring
+- ✅ **Schema Registry** - Avro data serialization for Flink output
+- ✅ **Multi-partition topics** - Scalable architecture (6 partitions)
+- ✅ **Business impact** - Prevents workplace injuries through early detection
+- ✅ **Production-ready patterns** - MQTT/TLS, proper partitioning, real-time alerts
+
+**Key Innovation:** Real-time ergonomic risk detection using streaming analytics - detecting dangerous postures, loads, and repetition patterns before injuries occur.
 
 ## 📝 License
 
