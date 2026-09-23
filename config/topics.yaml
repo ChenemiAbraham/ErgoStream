@@ -1,0 +1,70 @@
+# Kafka Topics Configuration for ErgoStream
+
+topics:
+  # Raw worker telemetry
+  - name: ergo.worker.motion
+    partitions: 6
+    replication_factor: 3
+    config:
+      retention.ms: 86400000  # 1 day
+      compression.type: lz4
+      cleanup.policy: delete
+    description: "Raw motion sensor data from workers"
+
+  # Processed posture events
+  - name: ergo.worker.posture
+    partitions: 6
+    replication_factor: 3
+    config:
+      retention.ms: 86400000
+      compression.type: lz4
+    description: "Aggregated posture analysis events"
+
+  # Task assignment events
+  - name: ergo.worker.task
+    partitions: 3
+    replication_factor: 3
+    config:
+      retention.ms: 604800000  # 7 days
+      compression.type: lz4
+      cleanup.policy: compact
+    description: "Worker task assignments and rotations"
+
+  # High-risk detections (Flink output)
+  - name: ergo.risk.detected
+    partitions: 6
+    replication_factor: 3
+    config:
+      retention.ms: 2592000000  # 30 days
+      compression.type: lz4
+      cleanup.policy: delete
+    description: "High-risk conditions detected by Flink"
+
+  # AI-generated interventions
+  - name: ergo.interventions
+    partitions: 6
+    replication_factor: 3
+    config:
+      retention.ms: 2592000000  # 30 days
+      compression.type: lz4
+    description: "AI-generated intervention recommendations"
+
+  # Analytics - Station summaries
+  - name: ergo.analytics.station
+    partitions: 3
+    replication_factor: 3
+    config:
+      retention.ms: 604800000  # 7 days
+      compression.type: lz4
+      cleanup.policy: compact
+    description: "Aggregated risk metrics by station"
+
+  # Analytics - Worker summaries
+  - name: ergo.analytics.worker
+    partitions: 6
+    replication_factor: 3
+    config:
+      retention.ms: 2592000000  # 30 days
+      compression.type: lz4
+      cleanup.policy: compact
+    description: "Aggregated risk metrics by worker"

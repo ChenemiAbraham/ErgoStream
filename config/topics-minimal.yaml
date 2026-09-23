@@ -1,0 +1,33 @@
+# Minimal Kafka Topics for ErgoStream Hackathon
+# Only the 3 essential topics needed for demo
+
+topics:
+  # 1. Raw worker telemetry (PRIMARY DATA SOURCE)
+  - name: ergo.worker.motion
+    partitions: 3              # Good for 10 workers
+    replication_factor: 3      # High availability
+    config:
+      retention.ms: 86400000   # 1 day (24 hours)
+      compression.type: lz4    # Fast compression
+      cleanup.policy: delete   # Delete old messages
+    description: "Raw motion sensor data from workers"
+
+  # 2. High-risk detections (FLINK OUTPUT)
+  - name: ergo.risk.detected
+    partitions: 3              # Match input topic
+    replication_factor: 3
+    config:
+      retention.ms: 2592000000 # 30 days (compliance)
+      compression.type: lz4
+      cleanup.policy: delete
+    description: "High-risk conditions detected by Flink"
+
+  # 3. AI-generated interventions (AGENT OUTPUT)
+  - name: ergo.interventions
+    partitions: 3              # Match risk topic
+    replication_factor: 3
+    config:
+      retention.ms: 2592000000 # 30 days (audit trail)
+      compression.type: lz4
+      cleanup.policy: delete
+    description: "Rule-based intervention recommendations"
