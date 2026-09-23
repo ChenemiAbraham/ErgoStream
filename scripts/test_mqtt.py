@@ -3,7 +3,12 @@
 import json
 import time
 import ssl
+import os
 import paho.mqtt.client as mqtt
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 
 def on_connect(client, userdata, flags, rc):
@@ -28,11 +33,18 @@ def test_mqtt_connection():
     # Create client
     client = mqtt.Client(client_id="ergostream-test")
 
+    # Get MQTT configuration from environment
+    broker_host = os.getenv("MQTT_BROKER_HOST", "localhost")
+    broker_port = int(os.getenv("MQTT_BROKER_PORT", "8883"))
+    username = os.getenv("MQTT_USERNAME")
+    password = os.getenv("MQTT_PASSWORD")
+
     # Configure TLS
     client.tls_set(cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLS)
 
     # Set credentials
-    client.username_pw_set("threia-emqx", "Eagle1994@Ankpa")
+    if username and password:
+        client.username_pw_set(username, password)
 
     # Set callbacks
     client.on_connect = on_connect
@@ -40,8 +52,8 @@ def test_mqtt_connection():
 
     try:
         # Connect
-        print("\n1. Connecting to x9b181ae.ala.eu-central-1.emqxsl.com:8883...")
-        client.connect("x9b181ae.ala.eu-central-1.emqxsl.com", 8883, keepalive=60)
+        print(f"\n1. Connecting to {broker_host}:{broker_port}...")
+        client.connect(broker_host, broker_port, keepalive=60)
 
         # Start network loop
         client.loop_start()

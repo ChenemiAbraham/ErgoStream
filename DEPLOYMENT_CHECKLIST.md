@@ -6,9 +6,15 @@ Use this checklist to get ErgoStream running for your hackathon demo.
 
 ### ☐ 1. Python Environment
 ```bash
-cd C:\Users\Han\OneDrive\Documents\ErgoStream
+cd ErgoStream
 python -m venv venv
+
+# Windows
 venv\Scripts\activate
+
+# Mac/Linux
+source venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
@@ -45,7 +51,7 @@ pip install -r requirements.txt
 
 ### ☐ 3. Configure .env File
 
-Edit `C:\Users\Han\OneDrive\Documents\ErgoStream\.env`:
+Copy `.env.example` to `.env` and edit:
 
 ```bash
 CONFLUENT_BOOTSTRAP_SERVERS=<paste-bootstrap-servers>

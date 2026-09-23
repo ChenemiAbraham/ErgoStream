@@ -4,15 +4,15 @@
 
 ```
 Python Producer → EMQX MQTT Broker → MQTT Source Connector → Kafka Topic
-   (paho-mqtt)    (x9b181ae.ala.*)      (Confluent)        (ergo.worker.motion)
+   (paho-mqtt)    (cloud/self-hosted)   (Confluent)        (ergo.worker.motion)
 ```
 
-## ✅ What You've Done
+## Prerequisites
 
-- ✅ EMQX MQTT broker deployed
-- ✅ MQTT Source Connector configured in Confluent
-- ✅ Topics created: `ergo.worker.motion`, `ergo.risk.detected`, `ergo.interventions`
-- ✅ Connector listening to: `workers/+/telemetry`
+- EMQX MQTT broker (cloud or self-hosted)
+- Confluent Cloud cluster with MQTT Source Connector
+- Topics: `ergo.worker.motion`, `ergo.risk.detected`, `ergo.interventions`
+- Connector configured to listen to: `workers/+/telemetry`
 
 ## 🚀 Quick Start
 
@@ -143,10 +143,10 @@ Value: {"worker_id": "W1042", ...}
 
 ### "Connection refused - bad username or password"
 
-**Fix:** Check credentials in `mqtt_telemetry.py` match EMQX:
-```python
-self.username = "threia-emqx"
-self.password = "Eagle1994@Ankpa"
+**Fix:** Check your MQTT credentials in `.env` file:
+```bash
+MQTT_USERNAME=your-mqtt-username
+MQTT_PASSWORD=your-mqtt-password
 ```
 
 ### "No messages in Kafka topic"
@@ -177,7 +177,7 @@ client.tls_set(cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLS)
 ## 📈 Monitoring
 
 ### In EMQX Dashboard
-- Go to https://x9b181ae.ala.eu-central-1.emqxsl.com:8443
+- Go to your EMQX dashboard URL
 - Login with your credentials
 - Check **Clients** - should see `ergostream-mqtt-producer`
 - Check **Topics** - should see `workers/*/telemetry`
@@ -246,8 +246,8 @@ See [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) for complete flow!
 
 ## 📝 Configuration Summary
 
-**EMQX Broker:**
-- Host: `x9b181ae.ala.eu-central-1.emqxsl.com`
+**MQTT Broker:**
+- Host: Your MQTT broker hostname (configured in `.env`)
 - Port: `8883` (MQTT over TLS)
 - Protocol: `ssl://`
 

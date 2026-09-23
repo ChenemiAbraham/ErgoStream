@@ -176,7 +176,7 @@ class ErgoOpsAgent:
     def run(self):
         """Run the agent continuously."""
         log.info("=" * 60)
-        log.info("ErgoOps AI Agent - Starting")
+        log.info("ErgoOps Rule-Based Agent - Starting")
         log.info("=" * 60)
         log.info("Monitoring risk events and generating interventions...")
 
@@ -186,7 +186,7 @@ class ErgoOpsAgent:
 
 
 def main():
-    """Entry point for AI agent."""
+    """Entry point for rule-based agent."""
     agent = ErgoOpsAgent()
     agent.run()
 

@@ -16,17 +16,19 @@ class MQTTTelemetryProducer:
         """Initialize MQTT client."""
         self.client = mqtt.Client(client_id="ergostream-mqtt-producer")
 
-        # EMQX credentials (from your MQTT connector config)
-        self.broker = "x9b181ae.ala.eu-central-1.emqxsl.com"
-        self.port = 8883
-        self.username = "threia-emqx"
-        self.password = "Eagle1994@Ankpa"
+        # MQTT broker configuration from environment
+        import os
+        self.broker = os.getenv("MQTT_BROKER_HOST", "localhost")
+        self.port = int(os.getenv("MQTT_BROKER_PORT", "8883"))
+        self.username = os.getenv("MQTT_USERNAME")
+        self.password = os.getenv("MQTT_PASSWORD")
 
         # Configure TLS/SSL
         self.client.tls_set(cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLS)
 
         # Set credentials
-        self.client.username_pw_set(self.username, self.password)
+        if self.username and self.password:
+            self.client.username_pw_set(self.username, self.password)
 
         # Set callbacks
         self.client.on_connect = self.on_connect

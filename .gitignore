@@ -54,3 +54,4 @@ Thumbs.db
 # Confluent
 .confluent/
 credentials.json
+api-key-*.txt
